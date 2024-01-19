@@ -56,7 +56,7 @@ class Clean
                 $this->messageManager->addSuccessMessage(__('The url was cleaned.'));
             }
         } catch (Exception $exception) {
-            $this->messageManager->addExceptionMessage($exception, __('An error occurred while clearing the url.'));
+            $this->messageManager->addExceptionMessage($exception, __('An error occurred while cleaning the url.'));
         }
 
         /** @var Redirect $resultRedirect */
