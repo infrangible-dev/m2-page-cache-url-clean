@@ -1,0 +1,18 @@
+<?php
+use Infrangible\PageCacheUrlClean\Block\Clean;
+/** @var Clean $block */
+?>
+
+<div class="additional-cache-management page-cache-url-clean">
+    <h2>
+        <span><?= $block->escapeHtml(__('Page Cache Url Clean')); ?></span>
+    </h2>
+    <form action="<?= $block->escapeUrl($block->getCleanUrl()); ?>" method="post">
+        <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()); ?>"/>
+        <label>
+            <input type="text" name="url">
+        </label>
+        <button type="submit"><?= $block->escapeHtml(__('Clean url')); ?></button>
+    </form>
+</div>
+
