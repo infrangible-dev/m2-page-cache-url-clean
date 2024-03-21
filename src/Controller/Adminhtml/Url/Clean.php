@@ -8,7 +8,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\PageCache\Model\Cache\Type;
-use Tofex\Help\Variables;
+use FeWeDev\Base\Variables;
 use Zend_Cache;
 
 /**
@@ -22,7 +22,7 @@ class Clean
     public const ADMIN_RESOURCE = 'Infrangible_PageCacheUrlClean::infrangible_page_cache_url_clean';
 
     /** @var Variables */
-    protected $variableHelper;
+    protected $variables;
 
     /** @var Type */
     protected $pageCacheType;
@@ -36,7 +36,7 @@ class Clean
     {
         parent::__construct($context);
 
-        $this->variableHelper = $variableHelper;
+        $this->variables = $variableHelper;
         $this->pageCacheType = $pageCacheType;
     }
 
@@ -48,7 +48,7 @@ class Clean
         try {
             $url = $this->_request->getParam('url');
 
-            if ($this->variableHelper->isEmpty($url)) {
+            if ($this->variables->isEmpty($url)) {
                 $this->messageManager->addErrorMessage(__('No url to clean.'));
             } else {
                 $this->pageCacheType->clean(Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [sha1($url)]);
