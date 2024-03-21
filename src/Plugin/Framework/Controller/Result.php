@@ -41,9 +41,9 @@ class Result
     public function afterRenderResult(
         ResultInterface $subject,
         ResultInterface $result,
-        Http $response): ResultInterface
-    {
-        if ( ! $this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
+        Http $response
+    ): ResultInterface {
+        if (!$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
             return $result;
         }
 

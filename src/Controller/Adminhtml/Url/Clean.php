@@ -3,12 +3,12 @@
 namespace Infrangible\PageCacheUrlClean\Controller\Adminhtml\Url;
 
 use Exception;
+use FeWeDev\Base\Variables;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\PageCache\Model\Cache\Type;
-use FeWeDev\Base\Variables;
 use Zend_Cache;
 
 /**
