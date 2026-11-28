@@ -1,39 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * @author      Andreas Knollmann
+ * @copyright   Copyright (c) 2014-2026 Softwareentwicklung Andreas Knollmann
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
+ */
+
 namespace Infrangible\PageCacheUrlClean\Plugin\Framework\Controller;
 
-use Laminas\Http\Request;
-use Magento\Framework\App\Response\Http;
+use FeWeDev\Base\Variables;
+use Infrangible\PageCacheUrlClean\Helper\Data;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\PageCache\Model\Config;
 
 /**
- * @author      Andreas Knollmann
- * @copyright   Copyright (c) 2014-2024 Softwareentwicklung Andreas Knollmann
- * @license     http://www.opensource.org/licenses/mit-license.php MIT
+ * Adds the tag of the URL of the page to the tags of the page, with which the built-in full page cache saves it.
  */
 class Result
 {
-    /** @var Config */
-    private $config;
-
-    /** @var \Magento\Framework\App\Request\Http */
-    private $request;
+    /** The header with the tags of the page. */
+    private const TAGS_HEADER = 'X-Magento-Tags';
 
     /**
-     * @param Config                              $config
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param Config $config
+     * @param HttpRequest $request
+     * @param Variables $variables
+     * @param Data $helper
      */
-    public function __construct(Config $config, \Magento\Framework\App\Request\Http $request)
-    {
-        $this->config = $config;
-        $this->request = $request;
+    public function __construct(
+        protected Config $config,
+        protected HttpRequest $request,
+        protected Variables $variables,
+        protected Data $helper
+    ) {
     }
 
     /**
+     * Adds the tag of the URL, if the built-in full page cache is used.
+     *
      * @param ResultInterface $subject
      * @param ResultInterface $result
-     * @param Http            $response
+     * @param HttpResponse $response
      *
      * @return ResultInterface
      * @noinspection PhpUnusedParameterInspection
@@ -41,26 +52,18 @@ class Result
     public function afterRenderResult(
         ResultInterface $subject,
         ResultInterface $result,
-        Http $response
+        HttpResponse $response
     ): ResultInterface {
-        if (!$this->config->isEnabled() || $this->config->getType() != Config::BUILT_IN) {
+        if (! $this->config->isEnabled() || $this->variables->intValue($this->config->getType()) !== Config::BUILT_IN) {
             return $result;
         }
 
-        $tagsHeader = $response->getHeader('X-Magento-Tags');
-        $tags = [];
+        $tagsHeader = $response->getHeader(self::TAGS_HEADER);
+        $tags = is_object($tagsHeader) ? explode(',', $tagsHeader->getFieldValue()) : [];
 
-        if ($tagsHeader) {
-            $tags = explode(',', $tagsHeader->getFieldValue());
-            $response->clearHeader('X-Magento-Tags');
-        }
+        $tags[] = $this->helper->getUrlTag($this->request->getUriString());
 
-        if ($this->request instanceof Request) {
-            $url = $this->request->getUriString();
-            $tags[] = sha1($url);
-        }
-
-        $response->setHeader('X-Magento-Tags', implode(',', $tags));
+        $response->setHeader(self::TAGS_HEADER, implode(',', array_unique($tags)), true);
 
         return $result;
     }

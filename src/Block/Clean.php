@@ -1,47 +1,36 @@
 <?php
 
-namespace Infrangible\PageCacheUrlClean\Block;
-
-use Magento\Backend\Block\Template;
-use Magento\Backend\Block\Template\Context;
-use Magento\Framework\AuthorizationInterface;
+declare(strict_types=1);
 
 /**
  * @author      Andreas Knollmann
- * @copyright   Copyright (c) 2014-2024 Softwareentwicklung Andreas Knollmann
+ * @copyright   Copyright (c) 2014-2026 Softwareentwicklung Andreas Knollmann
  * @license     http://www.opensource.org/licenses/mit-license.php MIT
  */
-class Clean
-    extends Template
+
+namespace Infrangible\PageCacheUrlClean\Block;
+
+use Infrangible\PageCacheUrlClean\Controller\Adminhtml\Url\Clean as CleanController;
+use Magento\Backend\Block\Template;
+
+/**
+ * The form for cleaning the cache of a URL on the cache management page, for admin users with the permission.
+ */
+class Clean extends Template
 {
-    /** @var AuthorizationInterface */
-    protected $authorization;
-
     /**
-     * @param Context                $context
-     * @param AuthorizationInterface $authorization
-     * @param array                  $data
-     */
-    public function __construct(Template\Context $context, AuthorizationInterface $authorization, array $data = [])
-    {
-        parent::__construct($context, $data);
-
-        $this->authorization = $authorization;
-    }
-
-    /**
+     * Renders the form, if the admin user may clean the cache of URLs.
+     *
      * @return string
      */
     protected function _toHtml(): string
     {
-        if ($this->authorization->isAllowed('Infrangible_PageCacheUrlClean::infrangible_page_cache_url_clean')) {
-            return parent::_toHtml();
-        }
-
-        return '';
+        return $this->_authorization->isAllowed(CleanController::ADMIN_RESOURCE) ? parent::_toHtml() : '';
     }
 
     /**
+     * Returns the URL of the form.
+     *
      * @return string
      */
     public function getCleanUrl(): string

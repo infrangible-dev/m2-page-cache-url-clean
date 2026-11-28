@@ -2,7 +2,7 @@
     "name": "infrangible/m2-page-cache-url-clean",
     "description": "Adds a field to the Cache Management page to remove a single URL from the full page cache, without flushing the whole cache.",
     "type": "magento2-module",
-    "version": "2.0.1",
+    "version": "3.0.0",
     "license": "MIT",
     "keywords": [
         "Magento",
@@ -14,7 +14,7 @@
         "clean cache by URL",
         "purge single page"
     ],
-    "homepage": "https://bitbucket.org/infrangible/m2-page-cache-url-clean",
+    "homepage": "https://www.infrangible.dev/modules/page-cache-url-clean",
     "authors": [
         {
             "name": "Andreas Knollmann",
@@ -24,9 +24,16 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
-        "magento/framework": "~101.0.0|~102.0.0|~103.0.0",
-        "infrangible/m2-foundation": "~2.2.0"
+        "php": ">=8.1",
+        "fewedev/base": "~2.4.3",
+        "infrangible/m2-foundation": "~3.0.2",
+        "magento/framework": "~103.0.6",
+        "magento/module-backend": "~102.0.0",
+        "magento/module-page-cache": "~100.4.0",
+        "magento/zend-cache": "~1.16.0"
+    },
+    "require-dev": {
+        "infrangible/phpstan-magento": "~1.2.0"
     },
     "autoload": {
         "files": [

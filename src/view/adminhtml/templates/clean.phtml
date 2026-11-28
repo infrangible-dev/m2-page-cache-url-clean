@@ -1,18 +1,28 @@
 <?php
-use Infrangible\PageCacheUrlClean\Block\Clean;
-/** @var Clean $block */
-?>
 
+declare(strict_types=1);
+
+/**
+ * @author      Andreas Knollmann
+ * @copyright   Copyright (c) 2014-2026 Softwareentwicklung Andreas Knollmann
+ * @license     http://www.opensource.org/licenses/mit-license.php MIT
+ */
+
+use Infrangible\PageCacheUrlClean\Block\Clean;
+use Magento\Framework\Escaper;
+
+/** @var Clean $block */
+/** @var Escaper $escaper */
+?>
 <div class="additional-cache-management page-cache-url-clean">
     <h2>
-        <span><?= $block->escapeHtml(__('Page Cache Url Clean')); ?></span>
+        <span><?= $escaper->escapeHtml(__('Page Cache Url Clean')) ?></span>
     </h2>
-    <form action="<?= $block->escapeUrl($block->getCleanUrl()); ?>" method="post">
-        <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()); ?>"/>
+    <form action="<?= $escaper->escapeUrl($block->getCleanUrl()) ?>" method="post">
+        <input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>">
         <label>
             <input type="text" name="url">
         </label>
-        <button type="submit"><?= $block->escapeHtml(__('Clean url')); ?></button>
+        <button type="submit"><?= $escaper->escapeHtml(__('Clean url')) ?></button>
     </form>
 </div>
-
